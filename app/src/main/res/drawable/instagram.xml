@@ -1,0 +1,19 @@
+<vector android:height="120dp" android:viewportHeight="726.37"
+    android:viewportWidth="726.37" android:width="120dp"
+    xmlns:aapt="http://schemas.android.com/aapt" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillType="evenOdd"
+        android:pathData="M121.13,-0L605.25,-0c66.58,-0 121.13,54.54 121.13,121.13L726.38,605.24C726.38,671.83 671.83,726.37 605.25,726.37L121.13,726.37C54.54,726.37 0,671.83 0,605.24L0,121.13c0,-66.59 54.54,-121.13 121.13,-121.13l0,-0" android:strokeColor="#00000000">
+        <aapt:attr name="android:fillColor">
+            <gradient android:endX="109.44" android:endY="133.31"
+                android:startX="606.49" android:startY="583.6"
+                android:tileMode="clamp" android:type="linear">
+                <item android:color="#FFFAB93A" android:offset="0"/>
+                <item android:color="#FFED1A3C" android:offset="0.33"/>
+                <item android:color="#FFAA2498" android:offset="0.65"/>
+                <item android:color="#FF524AA8" android:offset="1"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path android:fillColor="#ffffff" android:fillType="evenOdd"
+        android:pathData="m229.25,363.19c0,-73.95 60,-133.94 133.94,-133.94 73.94,-0 133.94,60 133.94,133.94 0,73.94 -60,133.93 -133.94,133.93 -73.94,-0 -133.94,-59.99 -133.94,-133.93zM501.36,101.14l-276.33,-0c-68.12,-0 -123.88,55.77 -123.88,123.88l0,276.33c0,68.23 55.77,123.89 123.88,123.89l276.33,-0c68.23,-0 123.88,-55.66 123.88,-123.89l0,-276.33c0,-68.11 -55.65,-123.88 -123.88,-123.88zM225.02,132.11l276.33,-0c51.2,-0 92.91,41.83 92.91,92.91l0,276.33c0,51.2 -41.71,92.92 -92.91,92.92l-276.33,-0c-51.09,-0 -92.91,-41.72 -92.91,-92.92l0,-276.33c0,-51.08 41.83,-92.91 92.91,-92.91zM529.01,171.19c-15.09,-0 -27.2,12.23 -27.2,27.2 0,15.09 12.11,27.2 27.2,27.2 14.97,-0 27.2,-12.11 27.2,-27.2 0,-14.97 -12.23,-27.2 -27.2,-27.2zM532.21,363.19c0,-93.37 -75.66,-169.03 -169.03,-169.03 -93.37,-0 -169.02,75.66 -169.02,169.03 0,93.36 75.65,169.02 169.02,169.02 93.37,-0 169.03,-75.66 169.03,-169.02l0,-0" android:strokeColor="#00000000"/>
+</vector>
