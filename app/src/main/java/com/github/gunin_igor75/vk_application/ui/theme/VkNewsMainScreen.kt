@@ -1,76 +1,52 @@
 package com.github.gunin_igor75.vk_application.ui.theme
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.SnackbarResult
+import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import com.github.gunin_igor75.vk_application.ui.theme.NavBottomComponent.*
-import kotlinx.coroutines.launch
+import androidx.compose.ui.unit.dp
+import com.github.gunin_igor75.vk_application.domain.NavBottomComponent.Favorite
+import com.github.gunin_igor75.vk_application.domain.NavBottomComponent.Home
+import com.github.gunin_igor75.vk_application.domain.NavBottomComponent.Profile
+import com.github.gunin_igor75.vk_application.presentation.MainViewModel
 
 
-@Preview
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun MainScreen() {
-    val snackBarHostState = remember {
-        SnackbarHostState()
-    }
-    val scope = rememberCoroutineScope()
-    val fabIsVisible = remember {
-        mutableStateOf(true)
-    }
+fun MainScreen(
+    viewModel: MainViewModel
+) {
+
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState)
-        },
-        floatingActionButton = {
-            if (fabIsVisible.value) {
-                FloatingActionButton(
-                    onClick = {
-                        scope.launch {
-                            val action = snackBarHostState.showSnackbar(
-                                message = "This si SnackBar",
-                                actionLabel = "Hide FAB",
-                                duration = SnackbarDuration.Long
-                            )
-                            if (action == SnackbarResult.ActionPerformed) {
-                                fabIsVisible.value = false
-                            }
-                        }
-                    }) {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = null
-                    )
-                }
-            }
-        },
         bottomBar = {
             BottomNavigation {
-                val selectedPosition = remember {
-                    mutableStateOf(0)
-                }
+                val selectedPosition by viewModel.selectedNavItem.observeAsState(Home)
                 val list = listOf(Home, Favorite, Profile)
-
-                list.forEachIndexed { index, item ->
+                list.forEach { item ->
                     BottomNavigationItem(
-                        selected = selectedPosition.value == index,
+                        selected = selectedPosition == item,
                         onClick = {
-                            selectedPosition.value = index
+                            viewModel.changeSelectedNavComponent(item)
                         },
                         icon = {
                             Icon(
@@ -87,8 +63,60 @@ fun MainScreen() {
                 }
             }
         }
-    ) {
-        { it }
+    ) { padding ->
+        val state = viewModel.posts.observeAsState(listOf())
+        val listModel = state.value ?: mutableListOf()
+        LazyColumn(
+            modifier = Modifier.padding(padding),
+            contentPadding = PaddingValues(
+                top = 16.dp,
+                start = 8.dp,
+                end = 8.dp,
+                bottom = 16.dp,
+            ),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(
+                listModel.size,
+                key = { i ->
+                    listModel[i].id
+                }
+            ) { index ->
+                val dismissState = rememberDismissState()
+                if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                    viewModel.deletePost(listModel[index])
+                }
+                SwipeToDismiss(
+                    modifier = Modifier.animateItemPlacement(),
+                    state = dismissState,
+                    directions = setOf(DismissDirection.EndToStart),
+                    background = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.White),
+                        ) {
+                        }
+                    }
+                ) {
+                    CardPost(
+                        feedPost = listModel[index],
+                        onViewAndPostClickListener = { statisticItem ->
+                            viewModel.changeCountStatistic(statisticItem, listModel[index])
+                        },
+                        onSharedAndPostClickListener = { statisticItem ->
+                            viewModel.changeCountStatistic(statisticItem, listModel[index])
+                        },
+                        onCommentsAndPostClickListener = { statisticItem ->
+                            viewModel.changeCountStatistic(statisticItem, listModel[index])
+                        },
+                        onLakesAndPostClickListener = { statisticItem ->
+                            viewModel.changeCountStatistic(statisticItem, listModel[index])
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 

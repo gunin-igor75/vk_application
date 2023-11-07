@@ -1,4 +1,4 @@
-package com.github.gunin_igor75.vk_application.ui.theme
+package com.github.gunin_igor75.vk_application.domain
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
