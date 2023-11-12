@@ -1,7 +1,14 @@
 package com.github.gunin_igor75.vk_application.domain
 
+import android.os.Build
+import android.os.Bundle
+import android.os.Parcelable
+import androidx.navigation.NavType
 import com.github.gunin_igor75.vk_application.R
+import com.google.gson.Gson
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class FeedPost(
     val id: Int = -1,
     val community: String = "/dev/null",
@@ -15,4 +22,28 @@ data class FeedPost(
         StatisticItem(R.drawable.ic_share, 7, StatisticType.SHARED),
         StatisticItem(R.drawable.ic_like, 23, StatisticType.LIKES)
     )
-)
+): Parcelable {
+
+
+    companion object {
+        val NavigationType = object : NavType<FeedPost>(false){
+            override fun get(bundle: Bundle, key: String): FeedPost? {
+                return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    bundle.getParcelable(key, FeedPost::class.java)
+                } else {
+                     bundle.getParcelable<FeedPost>(key)
+                }
+            }
+
+            override fun parseValue(value: String): FeedPost {
+                return Gson().fromJson(value, FeedPost::class.java)
+            }
+
+            override fun put(bundle: Bundle, key: String, value: FeedPost) {
+                bundle.putParcelable(key, value)
+            }
+        }
+    }
+}
+
+
