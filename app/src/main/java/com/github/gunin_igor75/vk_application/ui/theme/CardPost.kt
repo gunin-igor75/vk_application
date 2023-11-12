@@ -1,6 +1,7 @@
 package com.github.gunin_igor75.vk_application.ui.theme
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,61 +26,128 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.github.gunin_igor75.vk_application.R
+import com.github.gunin_igor75.vk_application.domain.FeedPost
+import com.github.gunin_igor75.vk_application.domain.StatisticItem
+import com.github.gunin_igor75.vk_application.domain.StatisticType
+import com.github.gunin_igor75.vk_application.domain.StatisticType.COMMENTS
+import com.github.gunin_igor75.vk_application.domain.StatisticType.LIKES
+import com.github.gunin_igor75.vk_application.domain.StatisticType.SHARED
+import com.github.gunin_igor75.vk_application.domain.StatisticType.VIEW
 
 
 @Composable
-fun CardPost() {
+fun CardPost(
+    modifier: Modifier = Modifier,
+    feedPost: FeedPost,
+    onViewAndPostClickListener: (StatisticItem) -> Unit,
+    onSharedAndPostClickListener: (StatisticItem) -> Unit,
+    onCommentsAndPostClickListener: (StatisticItem) -> Unit,
+    onLakesAndPostClickListener: (StatisticItem) -> Unit
+) {
     Card(
-
+        modifier = modifier
     ) {
         Column(
             modifier = Modifier
                 .padding(8.dp)
         ) {
-            HeaderPost()
+            HeaderPost(feedPost)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+            Text(text = feedPost.content)
             Spacer(modifier = Modifier.height(8.dp))
             Image(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
                 painter = painterResource(
-                    id = R.drawable.post_content_image
+                    id = feedPost.imagePostId
                 ),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Statistic()
+            Statistic(
+                statistics = feedPost.statistics,
+                onViewClickListener = onViewAndPostClickListener,
+                onSharedClickListener = onSharedAndPostClickListener,
+                onCommentsClickListener = onCommentsAndPostClickListener,
+                onLakesClickListener = onLakesAndPostClickListener
+            )
         }
     }
-
 }
 
 @Composable
-fun Statistic() {
+fun Statistic(
+    statistics: List<StatisticItem>,
+    onViewClickListener: (StatisticItem) -> Unit,
+    onSharedClickListener: (StatisticItem) -> Unit,
+    onCommentsClickListener: (StatisticItem) -> Unit,
+    onLakesClickListener: (StatisticItem) -> Unit
+) {
     Row {
         Row(
             modifier = Modifier.weight(1f)
         ) {
-            StatisticElement(iconId = R.drawable.ic_views_count, value = "916")
+            val view = statistics.getByType(VIEW)
+            StatisticElement(
+                iconId = view.iconId,
+                value = view.count.toString(),
+                onItemClickListener = {
+                    onViewClickListener(view)
+                }
+            )
         }
         Row(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            StatisticElement(iconId = R.drawable.ic_share, value = "7")
-            StatisticElement(iconId = R.drawable.ic_comment, value = "8")
-            StatisticElement(iconId = R.drawable.ic_like, value = "23")
+            val shared = statistics.getByType(SHARED)
+            StatisticElement(
+                iconId = shared.iconId,
+                value = shared.count.toString(),
+                onItemClickListener = {
+                    onSharedClickListener(shared)
+                }
+            )
+            val comments = statistics.getByType(COMMENTS)
+            StatisticElement(
+                iconId = comments.iconId,
+                value = comments.count.toString(),
+                onItemClickListener = {
+                    onCommentsClickListener(comments)
+                }
+            )
+            val likes = statistics.getByType(LIKES)
+            StatisticElement(
+                iconId = likes.iconId,
+                value = likes.count.toString(),
+                onItemClickListener = {
+                    onLakesClickListener(likes)
+                }
+            )
         }
     }
 
 }
 
+private fun List<StatisticItem>.getByType(type: StatisticType): StatisticItem {
+    return this.find {
+        it.type == type
+    } ?: throw IllegalStateException("Type $type does not exist")
+}
+
 @Composable
-fun StatisticElement(iconId: Int, value: String) {
+fun StatisticElement(
+    iconId: Int,
+    value: String,
+    onItemClickListener: () -> Unit
+) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.clickable {
+            onItemClickListener()
+        }
     ) {
         Icon(
             painter = painterResource(id = iconId),
@@ -96,7 +164,9 @@ fun StatisticElement(iconId: Int, value: String) {
 }
 
 @Composable
-fun HeaderPost() {
+fun HeaderPost(
+    feedPost: FeedPost
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -104,7 +174,7 @@ fun HeaderPost() {
     ) {
         Image(
             painter = painterResource(
-                id = R.drawable.post_comunity_thumbnail
+                id = feedPost.avatarId
             ),
             contentDescription = null,
             modifier = Modifier
@@ -117,12 +187,12 @@ fun HeaderPost() {
                 .weight(1f)
         ) {
             Text(
-                text = "/dev/null",
+                text = feedPost.community,
                 color = MaterialTheme.colors.onPrimary
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "14:00",
+                text = feedPost.createAt,
                 color = MaterialTheme.colors.onSecondary
             )
         }
@@ -134,23 +204,3 @@ fun HeaderPost() {
     }
 }
 
-
-@Preview
-@Composable
-fun PreviewLight() {
-    Vk_applicationTheme(
-        darkTheme = false
-    ) {
-        CardPost()
-    }
-}
-
-@Preview
-@Composable
-fun PreviewNight() {
-    Vk_applicationTheme(
-        darkTheme = true
-    ) {
-        CardPost()
-    }
-}

@@ -10,40 +10,40 @@ import androidx.compose.ui.graphics.Color
 
 @SuppressLint("ConflictingOnColor")
 private val DarkColorPalette = darkColors(
-//    primary = Black900,
-//    primaryVariant = Black900,
-//    secondary = Black900,
-//    onPrimary = Color.White,
-//    onSecondary = Black500
+    primary = Black900,
+    primaryVariant = Black900,
+    secondary = Black900,
+    onPrimary = Color.White,
+    onSecondary = Black500
 
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200,
-    background = Color.Black,
-    surface = Color.Black,
-    onPrimary = Color.Black,
-    onSecondary = Color.White,
-    onBackground = Color.White,
-    onSurface = Color.White,
+//    primary = Purple200,
+//    primaryVariant = Purple700,
+//    secondary = Teal200,
+//    background = Color.Black,
+//    surface = Color.Black,
+//    onPrimary = Color.Black,
+//    onSecondary = Color.White,
+//    onBackground = Color.White,
+//    onSurface = Color.White,
 )
 
 @SuppressLint("ConflictingOnColor")
 private val LightColorPalette = lightColors(
-//    primary = Color.White,
-//    primaryVariant = Color.White,
-//    secondary = Color.White,
-//    onPrimary = Black900,
-//    onSecondary = Black500
+    primary = Color.White,
+    primaryVariant = Color.White,
+    secondary = Color.White,
+    onPrimary = Black900,
+    onSecondary = Black500
 
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200,
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
+//    primary = Purple500,
+//    primaryVariant = Purple700,
+//    secondary = Teal200,
+//    background = Color.White,
+//    surface = Color.White,
+//    onPrimary = Color.White,
+//    onSecondary = Color.Black,
+//    onBackground = Color.Black,
+//    onSurface = Color.Black,
 )
 
 @Composable
