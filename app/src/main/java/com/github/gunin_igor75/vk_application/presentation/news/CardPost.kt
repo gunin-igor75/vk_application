@@ -1,4 +1,4 @@
-package com.github.gunin_igor75.vk_application.ui.theme
+package com.github.gunin_igor75.vk_application.presentation.news
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -26,6 +27,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.github.gunin_igor75.vk_application.R
 import com.github.gunin_igor75.vk_application.domain.FeedPost
 import com.github.gunin_igor75.vk_application.domain.StatisticItem
 import com.github.gunin_igor75.vk_application.domain.StatisticType
@@ -55,13 +58,11 @@ fun CardPost(
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = feedPost.content)
             Spacer(modifier = Modifier.height(8.dp))
-            Image(
+            AsyncImage(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp),
-                painter = painterResource(
-                    id = feedPost.imagePostId
-                ),
+                    .wrapContentHeight(),
+                model = feedPost.imagePostId,
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
@@ -91,7 +92,7 @@ fun Statistic(
         ) {
             val view = statistics.getByType(VIEW)
             StatisticElement(
-                iconId = view.iconId,
+                iconId = R.drawable.ic_views_count,
                 value = view.count.toString(),
                 onItemClickListener = {
                     onViewClickListener(view)
@@ -104,7 +105,7 @@ fun Statistic(
         ) {
             val shared = statistics.getByType(SHARED)
             StatisticElement(
-                iconId = shared.iconId,
+                iconId = R.drawable.ic_share,
                 value = shared.count.toString(),
                 onItemClickListener = {
                     onSharedClickListener(shared)
@@ -112,7 +113,7 @@ fun Statistic(
             )
             val comments = statistics.getByType(COMMENTS)
             StatisticElement(
-                iconId = comments.iconId,
+                iconId = R.drawable.ic_comment,
                 value = comments.count.toString(),
                 onItemClickListener = {
                     onCommentsClickListener(comments)
@@ -120,7 +121,7 @@ fun Statistic(
             )
             val likes = statistics.getByType(LIKES)
             StatisticElement(
-                iconId = likes.iconId,
+                iconId = R.drawable.ic_like,
                 value = likes.count.toString(),
                 onItemClickListener = {
                     onLakesClickListener(likes)
@@ -172,10 +173,8 @@ fun HeaderPost(
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(
-                id = feedPost.avatarId
-            ),
+        AsyncImage(
+            model = feedPost.avatarId,
             contentDescription = null,
             modifier = Modifier
                 .size(50.dp)

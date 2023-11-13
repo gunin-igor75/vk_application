@@ -63,6 +63,13 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation ("com.vk:android-sdk-core:4.1.0")
+    implementation ("com.vk:android-sdk-api:4.1.0")
+
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

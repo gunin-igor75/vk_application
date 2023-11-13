@@ -1,4 +1,4 @@
-package com.github.gunin_igor75.vk_application.ui.theme.home
+package com.github.gunin_igor75.vk_application.presentation.main
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
@@ -9,25 +9,21 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.github.gunin_igor75.vk_application.domain.FeedPost
 import com.github.gunin_igor75.vk_application.domain.NavComponent.Favorite
 import com.github.gunin_igor75.vk_application.domain.NavComponent.Home
 import com.github.gunin_igor75.vk_application.domain.NavComponent.Profile
 import com.github.gunin_igor75.vk_application.navigation.AppNavGraph
-import com.github.gunin_igor75.vk_application.navigation.Screen
 import com.github.gunin_igor75.vk_application.navigation.rememberNavigationState
-import com.github.gunin_igor75.vk_application.ui.theme.comments.CommentsScreen
+import com.github.gunin_igor75.vk_application.presentation.comments.CommentsScreen
+import com.github.gunin_igor75.vk_application.presentation.news.HomeScreen
 
 
 @Composable

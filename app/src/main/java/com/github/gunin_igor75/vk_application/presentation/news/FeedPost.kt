@@ -1,4 +1,4 @@
-package com.github.gunin_igor75.vk_application.ui.theme.home
+package com.github.gunin_igor75.vk_application.presentation.news
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -18,8 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.github.gunin_igor75.vk_application.domain.FeedPost
-import com.github.gunin_igor75.vk_application.presentation.NewsFeedViewModel
-import com.github.gunin_igor75.vk_application.ui.theme.CardPost
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable

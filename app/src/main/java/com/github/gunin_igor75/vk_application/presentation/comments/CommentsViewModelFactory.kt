@@ -1,4 +1,4 @@
-package com.github.gunin_igor75.vk_application.presentation
+package com.github.gunin_igor75.vk_application.presentation.comments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

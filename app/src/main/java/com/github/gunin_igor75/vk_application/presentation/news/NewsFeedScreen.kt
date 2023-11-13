@@ -1,12 +1,11 @@
-package com.github.gunin_igor75.vk_application.ui.theme.home
+package com.github.gunin_igor75.vk_application.presentation.news
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.gunin_igor75.vk_application.domain.FeedPost
-import com.github.gunin_igor75.vk_application.presentation.NewsFeedViewModel
-import com.github.gunin_igor75.vk_application.ui.theme.home.NewsFeedScreenState.InitialState
+import com.github.gunin_igor75.vk_application.presentation.news.NewsFeedScreenState.InitialState
 
 
 @Composable
@@ -14,7 +13,7 @@ fun HomeScreen(
     paddingValues: PaddingValues,
     onCommentsAndPostClickListener: (FeedPost) -> Unit
 ) {
-    val viewModel:NewsFeedViewModel = viewModel()
+    val viewModel: NewsFeedViewModel = viewModel()
 
     val state = viewModel.screenState.observeAsState(InitialState)
 

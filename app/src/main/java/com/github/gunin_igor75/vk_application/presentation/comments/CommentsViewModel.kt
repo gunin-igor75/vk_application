@@ -1,12 +1,11 @@
-package com.github.gunin_igor75.vk_application.presentation
+package com.github.gunin_igor75.vk_application.presentation.comments
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.gunin_igor75.vk_application.domain.Comment
 import com.github.gunin_igor75.vk_application.domain.FeedPost
-import com.github.gunin_igor75.vk_application.ui.theme.comments.CommentsScreenState
-import com.github.gunin_igor75.vk_application.ui.theme.comments.CommentsScreenState.InitialState
+import com.github.gunin_igor75.vk_application.presentation.comments.CommentsScreenState.InitialState
 
 class CommentsViewModel(
     feedPost: FeedPost

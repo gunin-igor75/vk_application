@@ -1,4 +1,4 @@
-package com.github.gunin_igor75.vk_application.ui.theme.home
+package com.github.gunin_igor75.vk_application.presentation.news
 
 import com.github.gunin_igor75.vk_application.domain.FeedPost
 

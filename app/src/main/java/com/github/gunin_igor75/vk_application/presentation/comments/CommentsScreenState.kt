@@ -1,4 +1,4 @@
-package com.github.gunin_igor75.vk_application.ui.theme.comments
+package com.github.gunin_igor75.vk_application.presentation.comments
 
 import com.github.gunin_igor75.vk_application.domain.Comment
 import com.github.gunin_igor75.vk_application.domain.FeedPost

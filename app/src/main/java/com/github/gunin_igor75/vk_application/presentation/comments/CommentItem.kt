@@ -1,4 +1,4 @@
-package com.github.gunin_igor75.vk_application.ui.theme.comments
+package com.github.gunin_igor75.vk_application.presentation.comments
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

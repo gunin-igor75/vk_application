@@ -1,4 +1,4 @@
-package com.github.gunin_igor75.vk_application.ui.theme.comments
+package com.github.gunin_igor75.vk_application.presentation.comments
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -17,9 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.gunin_igor75.vk_application.domain.FeedPost
-import com.github.gunin_igor75.vk_application.presentation.CommentsViewModel
-import com.github.gunin_igor75.vk_application.presentation.CommentsViewModelFactory
-import com.github.gunin_igor75.vk_application.ui.theme.comments.CommentsScreenState.InitialState
+import com.github.gunin_igor75.vk_application.presentation.comments.CommentsScreenState.InitialState
 
 
 @Composable
