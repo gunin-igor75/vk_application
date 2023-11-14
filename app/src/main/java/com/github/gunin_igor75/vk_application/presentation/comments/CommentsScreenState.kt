@@ -6,6 +6,8 @@ import com.github.gunin_igor75.vk_application.domain.FeedPost
 sealed class CommentsScreenState {
     object InitialState : CommentsScreenState()
 
+    object Loading: CommentsScreenState()
+
     data class CommentState(
         val feedPost: FeedPost,
         val comments: List<Comment>

@@ -1,6 +1,5 @@
 package com.github.gunin_igor75.vk_application.presentation.comments
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,10 +14,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.github.gunin_igor75.vk_application.domain.Comment
 
 
@@ -32,11 +30,11 @@ fun CommentItem(comment: Comment) {
                 vertical = 4.dp
             )
     ) {
-        Image(
+        AsyncImage(
             modifier = Modifier
                 .clip(CircleShape)
-                .size(24.dp),
-            painter = painterResource(id = comment.authorAvatarId),
+                .size(48.dp),
+            model = comment.url,
             contentDescription = null
         )
 
@@ -49,7 +47,7 @@ fun CommentItem(comment: Comment) {
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = comment.textComment,
+                text = comment.text,
                 color = MaterialTheme.colors.onPrimary,
                 fontSize = 14.sp
             )
@@ -63,8 +61,3 @@ fun CommentItem(comment: Comment) {
     }
 }
 
-@Preview
-@Composable
-private fun VIewPrev() {
-    CommentItem(comment = Comment(id = 0))
-}

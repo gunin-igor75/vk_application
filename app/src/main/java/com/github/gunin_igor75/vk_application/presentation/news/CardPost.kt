@@ -1,6 +1,5 @@
 package com.github.gunin_igor75.vk_application.presentation.news
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,9 +22,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.github.gunin_igor75.vk_application.R
@@ -36,14 +35,13 @@ import com.github.gunin_igor75.vk_application.domain.StatisticType.COMMENTS
 import com.github.gunin_igor75.vk_application.domain.StatisticType.LIKES
 import com.github.gunin_igor75.vk_application.domain.StatisticType.SHARED
 import com.github.gunin_igor75.vk_application.domain.StatisticType.VIEW
+import com.github.gunin_igor75.vk_application.ui.theme.DarkRed
 
 
 @Composable
 fun CardPost(
     modifier: Modifier = Modifier,
     feedPost: FeedPost,
-    onViewAndPostClickListener: (StatisticItem) -> Unit,
-    onSharedAndPostClickListener: (StatisticItem) -> Unit,
     onCommentsAndPostClickListener: (StatisticItem) -> Unit,
     onLakesAndPostClickListener: (StatisticItem) -> Unit
 ) {
@@ -62,15 +60,14 @@ fun CardPost(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
-                model = feedPost.imagePostId,
+                model = feedPost.url,
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth
             )
             Spacer(modifier = Modifier.height(8.dp))
             Statistic(
+                feedPost.isUserLikes,
                 statistics = feedPost.statistics,
-                onViewClickListener = onViewAndPostClickListener,
-                onSharedClickListener = onSharedAndPostClickListener,
                 onCommentsClickListener = onCommentsAndPostClickListener,
                 onLakesClickListener = onLakesAndPostClickListener
             )
@@ -80,9 +77,8 @@ fun CardPost(
 
 @Composable
 fun Statistic(
+    isFavorite: Boolean,
     statistics: List<StatisticItem>,
-    onViewClickListener: (StatisticItem) -> Unit,
-    onSharedClickListener: (StatisticItem) -> Unit,
     onCommentsClickListener: (StatisticItem) -> Unit,
     onLakesClickListener: (StatisticItem) -> Unit
 ) {
@@ -93,10 +89,7 @@ fun Statistic(
             val view = statistics.getByType(VIEW)
             StatisticElement(
                 iconId = R.drawable.ic_views_count,
-                value = view.count.toString(),
-                onItemClickListener = {
-                    onViewClickListener(view)
-                }
+                value = convertCount(view.count)
             )
         }
         Row(
@@ -106,30 +99,38 @@ fun Statistic(
             val shared = statistics.getByType(SHARED)
             StatisticElement(
                 iconId = R.drawable.ic_share,
-                value = shared.count.toString(),
-                onItemClickListener = {
-                    onSharedClickListener(shared)
-                }
+                value = convertCount(shared.count)
             )
             val comments = statistics.getByType(COMMENTS)
             StatisticElement(
                 iconId = R.drawable.ic_comment,
-                value = comments.count.toString(),
+                value = convertCount(comments.count),
                 onItemClickListener = {
                     onCommentsClickListener(comments)
                 }
             )
-            val likes = statistics.getByType(LIKES)
-            StatisticElement(
-                iconId = R.drawable.ic_like,
-                value = likes.count.toString(),
+            val like = statistics.getByType(LIKES)
+                StatisticElement(
+                iconId = if (isFavorite) R.drawable.ic_like_set else R.drawable.ic_like,
+                value = convertCount(like.count),
                 onItemClickListener = {
-                    onLakesClickListener(likes)
-                }
+                    onLakesClickListener(like)
+                },
+                tint = if (isFavorite) DarkRed else MaterialTheme.colors.onSecondary
             )
         }
     }
 
+}
+
+private fun convertCount(number: Int): String {
+    return if (number > 1_000_000) {
+        String.format("%dK", number / 1000)
+    } else if (number > 1000) {
+        String.format("%.1fK", number / 1000f)
+    } else {
+        number.toString()
+    }
 }
 
 private fun List<StatisticItem>.getByType(type: StatisticType): StatisticItem {
@@ -142,18 +143,21 @@ private fun List<StatisticItem>.getByType(type: StatisticType): StatisticItem {
 fun StatisticElement(
     iconId: Int,
     value: String,
-    onItemClickListener: () -> Unit
+    onItemClickListener: (() -> Unit)? = null,
+    tint: Color = MaterialTheme.colors.onSecondary
 ) {
+    val modifier = if (onItemClickListener == null) Modifier else Modifier.clickable {
+        onItemClickListener()
+    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.clickable {
-            onItemClickListener()
-        }
+        modifier = modifier
     ) {
         Icon(
+            modifier = Modifier.size(20.dp),
             painter = painterResource(id = iconId),
             contentDescription = null,
-            tint = MaterialTheme.colors.onSecondary
+            tint = tint
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
