@@ -2,44 +2,67 @@ package com.github.gunin_igor75.vk_application.data.repository
 
 import android.app.Application
 import com.github.gunin_igor75.vk_application.data.mapper.NewsFeedMapper
-import com.github.gunin_igor75.vk_application.data.network.ApiFactory
 import com.github.gunin_igor75.vk_application.domain.FeedPost
 import com.github.gunin_igor75.vk_application.domain.StatisticItem
 import com.github.gunin_igor75.vk_application.domain.StatisticType
-import com.vk.api.sdk.VKPreferencesKeyValueStorage
-import com.vk.api.sdk.auth.VKAccessToken
+import com.github.gunin_igor75.vk_application.extensions.mergeWith
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 
 class NewsFeedRepository(
     application: Application
-) {
-
-    private val storage = VKPreferencesKeyValueStorage(application)
-
-    private val token = VKAccessToken.restore(storage)
-
-    private val apiService = ApiFactory.apiService
+) : VkRepository(application) {
 
     private val mapper = NewsFeedMapper()
 
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+
     private val _feedPosts = mutableListOf<FeedPost>()
 
-    private var nextFom: String? = null
+    private var nextFrom: String? = null
 
     val feedPosts: List<FeedPost>
         get() = _feedPosts.toList()
 
-    suspend fun loadRecommendations(): List<FeedPost> {
-        val startFrom = nextFom
-        if (startFrom == null && feedPosts.isNotEmpty()) return feedPosts
-        val data = if (startFrom == null) {
-            apiService.loadNewsFeed(getTokenAccess())
-        } else {
-            apiService.loadNewsFeed(getTokenAccess(), startFrom)
+
+    private val eventsNextLoading = MutableSharedFlow<Unit>(replay = 1)
+
+    private val refreshFeedPost = MutableSharedFlow<List<FeedPost>>()
+
+    private val loadRecommendations = flow {
+        eventsNextLoading.emit(Unit)
+        eventsNextLoading.collect {
+            val startFrom = nextFrom
+            if (startFrom == null && feedPosts.isNotEmpty()) {
+                emit(feedPosts)
+                return@collect
+            }
+            val data = if (startFrom == null) {
+                apiService.loadNewsFeed(getTokenAccess())
+            } else {
+                apiService.loadNewsFeed(
+                    token = getTokenAccess(),
+                    startFrom = startFrom
+                )
+            }
+            nextFrom = data.content.nextFrom
+            _feedPosts.addAll(mapper.responseNewsFeedDtoToFeedPost(data))
+            emit(feedPosts)
         }
-        nextFom = data.content.nextFrom
-        _feedPosts.addAll(mapper.responseNewsFeedDtoToFeedPost(data))
-        return feedPosts
     }
+
+    val recommendation = loadRecommendations
+        .mergeWith(refreshFeedPost)
+        .stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.Lazily,
+            initialValue = feedPosts
+        )
+
 
     suspend fun changeLikes(feedPost: FeedPost) {
         val likes = responseLikesCount(feedPost)
@@ -58,6 +81,11 @@ class NewsFeedRepository(
             statistics = statisticsNew,
             isUserLikes = !feedPost.isUserLikes
         )
+        refreshFeedPost.emit(feedPosts)
+    }
+
+    suspend fun loadDataNext() {
+        eventsNextLoading.emit(Unit)
     }
 
     suspend fun deletePost(feedPost: FeedPost) {
@@ -67,6 +95,7 @@ class NewsFeedRepository(
             postId = feedPost.id
         )
         _feedPosts.remove(feedPost)
+        refreshFeedPost.emit(feedPosts)
     }
 
     private suspend fun responseLikesCount(feedPost: FeedPost) =

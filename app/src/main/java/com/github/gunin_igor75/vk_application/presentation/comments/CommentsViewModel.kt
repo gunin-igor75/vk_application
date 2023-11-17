@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.gunin_igor75.vk_application.data.repository.CommentsRepository
 import com.github.gunin_igor75.vk_application.domain.FeedPost
 import com.github.gunin_igor75.vk_application.presentation.comments.CommentsScreenState.InitialState
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class CommentsViewModel(
@@ -28,11 +29,13 @@ class CommentsViewModel(
     private fun loadComments(feedPost: FeedPost) {
         _screenState.value = CommentsScreenState.Loading
         viewModelScope.launch {
-            val comments = repository.loadComments(feedPost)
-            _screenState.value = CommentsScreenState.CommentState(
-                feedPost,
-                comments
-            )
+            repository.loadComments(feedPost)
+                .collect {
+                    _screenState.value = CommentsScreenState.CommentState(
+                        feedPost = feedPost,
+                        comments = it
+                    )
+                }
         }
     }
 }

@@ -17,8 +17,8 @@ interface ApiService {
     @GET("newsfeed.getRecommended")
     suspend fun loadNewsFeed(
         @Query("access_token") token: String,
-        @Query("v") version: String = VERSION,
-        @Query("start_from") startFrom: String
+        @Query("start_from") startFrom: String,
+        @Query("v") version: String = VERSION
     ): ResponseNewsFeedDto
 
     @GET("likes.add")

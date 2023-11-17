@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,7 +23,7 @@ fun HomeScreen(
 ) {
     val viewModel: NewsFeedViewModel = viewModel()
 
-    val state = viewModel.screenState.observeAsState(InitialState)
+    val state = viewModel.screenState.collectAsState(InitialState)
 
     when (val currentState = state.value) {
         is NewsFeedScreenState.PostState -> {
@@ -48,6 +48,5 @@ fun HomeScreen(
         is InitialState -> {
 
         }
-
     }
 }
