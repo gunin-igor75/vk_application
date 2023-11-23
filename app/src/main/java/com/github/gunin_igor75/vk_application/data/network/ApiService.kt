@@ -58,11 +58,24 @@ interface ApiService {
         @Query("v") version: String = VERSION
     ): ResponseCommentsDto
 
+    @GET("wall.getComments")
+    suspend fun getComments(
+        @Query("access_token") token: String,
+        @Query("owner_id") ownerId:Long,
+        @Query("post_id") postId: Long,
+        @Query("start_comment_id") startCommentId: Long,
+        @Query("fields") photo: String = FIELDS,
+        @Query("extended") extended:Int = EXTENDED,
+        @Query("offset") offset: Int = OFFSET,
+        @Query("v") version: String = VERSION
+    ): ResponseCommentsDto
+
     companion object{
         private const val VERSION = "5.154"
         private const val POST = "post"
         private const val WALL = "wall"
         private const val EXTENDED = 1
         private const val FIELDS = "photo_100"
+        private const val OFFSET = 1
     }
 }

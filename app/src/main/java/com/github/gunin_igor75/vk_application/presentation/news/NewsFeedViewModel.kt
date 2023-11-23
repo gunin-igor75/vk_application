@@ -1,11 +1,13 @@
 package com.github.gunin_igor75.vk_application.presentation.news
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.gunin_igor75.vk_application.data.repository.NewsFeedRepository
 import com.github.gunin_igor75.vk_application.domain.FeedPost
 import com.github.gunin_igor75.vk_application.extensions.mergeWith
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -15,6 +17,10 @@ import kotlinx.coroutines.launch
 class NewsFeedViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = NewsFeedRepository(application)
+    
+    private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
+        Log.d(TAG, "Exception caught exception handler")
+    }
 
     private val recommendationFlow = repository.recommendation
 
@@ -25,7 +31,6 @@ class NewsFeedViewModel(application: Application) : AndroidViewModel(application
         .map { NewsFeedScreenState.PostState(posts = it) as NewsFeedScreenState }
         .onStart { emit(NewsFeedScreenState.Loading) }
         .mergeWith(loadNextDataFlow)
-
 
 
     fun nextLoadingNewsFeed() {
@@ -41,14 +46,18 @@ class NewsFeedViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun changeLikesStatus(feedPost: FeedPost) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             repository.changeLikes(feedPost)
         }
     }
 
     fun deletePost(feedPost: FeedPost) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             repository.deletePost(feedPost)
         }
+    }
+
+    companion object {
+        private const val TAG = "NewsFeedViewModel"
     }
 }

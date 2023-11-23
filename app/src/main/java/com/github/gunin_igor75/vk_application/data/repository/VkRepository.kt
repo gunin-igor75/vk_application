@@ -9,8 +9,8 @@ abstract class VkRepository(
     application: Application
 ) {
     private val storage = VKPreferencesKeyValueStorage(application)
-
-    protected val token = VKAccessToken.restore(storage)
+    protected val token
+        get() =  VKAccessToken.restore(storage)
 
     protected val apiService = ApiFactory.apiService
 }

@@ -1,6 +1,7 @@
 package com.github.gunin_igor75.vk_application.data.repository
 
 import android.app.Application
+import android.util.Log
 import com.github.gunin_igor75.vk_application.data.mapper.NewsFeedMapper
 import com.github.gunin_igor75.vk_application.domain.FeedPost
 import com.github.gunin_igor75.vk_application.domain.StatisticItem
@@ -8,9 +9,11 @@ import com.github.gunin_igor75.vk_application.domain.StatisticType
 import com.github.gunin_igor75.vk_application.extensions.mergeWith
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 
 class NewsFeedRepository(
@@ -19,14 +22,13 @@ class NewsFeedRepository(
 
     private val mapper = NewsFeedMapper()
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val _feedPosts = mutableListOf<FeedPost>()
+    private val feedPosts: List<FeedPost>
+        get() = _feedPosts.toList()
 
     private var nextFrom: String? = null
-
-    val feedPosts: List<FeedPost>
-        get() = _feedPosts.toList()
 
 
     private val eventsNextLoading = MutableSharedFlow<Unit>(replay = 1)
@@ -39,6 +41,7 @@ class NewsFeedRepository(
             val startFrom = nextFrom
             if (startFrom == null && feedPosts.isNotEmpty()) {
                 emit(feedPosts)
+                Log.d(TAG, "Конец загрузки ${feedPosts.size}")
                 return@collect
             }
             val data = if (startFrom == null) {
@@ -49,10 +52,15 @@ class NewsFeedRepository(
                     startFrom = startFrom
                 )
             }
+            Log.d(TAG, "Загрузка при $startFrom")
+//            Log.d(TAG, getTokenAccess())
             nextFrom = data.content.nextFrom
             _feedPosts.addAll(mapper.responseNewsFeedDtoToFeedPost(data))
             emit(feedPosts)
         }
+    }.retry {
+        delay(RETRY_TIMEOUT)
+        true
     }
 
     val recommendation = loadRecommendations
@@ -115,5 +123,10 @@ class NewsFeedRepository(
 
     private fun getTokenAccess(): String {
         return token?.accessToken ?: throw IllegalStateException("Token is null")
+    }
+
+    companion object {
+        private const val RETRY_TIMEOUT = 3000L
+        private const val TAG = "NewsFeedRepository"
     }
 }

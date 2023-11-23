@@ -1,11 +1,14 @@
 package com.github.gunin_igor75.vk_application.presentation.comments
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
@@ -17,7 +20,8 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,7 +47,7 @@ fun CommentsScreen(
             LocalContext.current.applicationContext as Application
         )
     )
-    val state = viewModel.screenState.observeAsState(InitialState)
+    val state = viewModel.commentsFlow.collectAsState(initial = InitialState)
 
     when (val currentState = state.value) {
         is CommentState -> {
@@ -68,7 +72,6 @@ fun CommentsScreen(
                     )
                 }
             ) { paddingValues ->
-
                 LazyColumn(
                     modifier = Modifier.padding(paddingValues),
                     contentPadding = PaddingValues(
@@ -79,8 +82,16 @@ fun CommentsScreen(
                     ),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    items(currentState.comments, key = { it.id }) {
+                    items(
+                        items = currentState.comments,
+                        key = { it.id }
+                    ) {
                         CommentItem(comment = it)
+                    }
+                    item {
+                        SideEffect {
+                            viewModel.nextLoadingComments()
+                        }
                     }
                 }
             }

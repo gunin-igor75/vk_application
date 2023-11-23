@@ -9,5 +9,6 @@ data class FeedPost(
     val avatarId: String,
     val content: String,
     val isUserLikes: Boolean,
-    val statistics: List<StatisticItem>
+    val statistics: List<StatisticItem>,
+    val countComment: Int
 )

@@ -41,7 +41,8 @@ class NewsFeedMapper {
                             post.likesDto.count,
                             StatisticType.LIKES
                         )
-                    )
+                    ),
+                    countComment = post.commentsDto.count
                 )
             )
         }
