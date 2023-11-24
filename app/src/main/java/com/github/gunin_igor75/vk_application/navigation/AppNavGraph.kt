@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.github.gunin_igor75.vk_application.domain.FeedPost
+import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
 
 @Composable
 fun AppNavGraph(

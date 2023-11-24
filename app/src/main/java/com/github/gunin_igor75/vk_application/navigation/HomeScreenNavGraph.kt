@@ -6,7 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
-import com.github.gunin_igor75.vk_application.domain.FeedPost
+import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
 import com.google.gson.Gson
 
 
