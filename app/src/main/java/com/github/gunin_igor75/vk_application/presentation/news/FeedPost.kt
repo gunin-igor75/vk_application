@@ -22,7 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.github.gunin_igor75.vk_application.domain.FeedPost
+import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
 import com.github.gunin_igor75.vk_application.ui.theme.DarkBlue
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)

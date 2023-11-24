@@ -28,13 +28,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.github.gunin_igor75.vk_application.R
-import com.github.gunin_igor75.vk_application.domain.FeedPost
-import com.github.gunin_igor75.vk_application.domain.StatisticItem
-import com.github.gunin_igor75.vk_application.domain.StatisticType
-import com.github.gunin_igor75.vk_application.domain.StatisticType.COMMENTS
-import com.github.gunin_igor75.vk_application.domain.StatisticType.LIKES
-import com.github.gunin_igor75.vk_application.domain.StatisticType.SHARED
-import com.github.gunin_igor75.vk_application.domain.StatisticType.VIEW
+import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
+import com.github.gunin_igor75.vk_application.domain.entity.StatisticItem
+import com.github.gunin_igor75.vk_application.domain.entity.StatisticType
+import com.github.gunin_igor75.vk_application.domain.entity.StatisticType.COMMENTS
+import com.github.gunin_igor75.vk_application.domain.entity.StatisticType.LIKES
+import com.github.gunin_igor75.vk_application.domain.entity.StatisticType.SHARED
+import com.github.gunin_igor75.vk_application.domain.entity.StatisticType.VIEW
 import com.github.gunin_igor75.vk_application.ui.theme.DarkRed
 
 

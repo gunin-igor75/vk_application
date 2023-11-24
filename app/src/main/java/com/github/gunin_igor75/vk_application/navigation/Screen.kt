@@ -1,7 +1,7 @@
 package com.github.gunin_igor75.vk_application.navigation
 
 import android.net.Uri
-import com.github.gunin_igor75.vk_application.domain.FeedPost
+import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
 import com.google.gson.Gson
 
 sealed class Screen(

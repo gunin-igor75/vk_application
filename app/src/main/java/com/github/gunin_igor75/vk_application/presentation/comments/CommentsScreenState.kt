@@ -1,7 +1,7 @@
 package com.github.gunin_igor75.vk_application.presentation.comments
 
-import com.github.gunin_igor75.vk_application.domain.Comment
-import com.github.gunin_igor75.vk_application.domain.FeedPost
+import com.github.gunin_igor75.vk_application.domain.entity.Comment
+import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
 
 sealed class CommentsScreenState {
     object InitialState : CommentsScreenState()

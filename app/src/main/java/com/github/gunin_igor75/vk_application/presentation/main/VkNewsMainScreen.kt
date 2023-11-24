@@ -17,9 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.github.gunin_igor75.vk_application.domain.NavComponent.Favorite
-import com.github.gunin_igor75.vk_application.domain.NavComponent.Home
-import com.github.gunin_igor75.vk_application.domain.NavComponent.Profile
+import com.github.gunin_igor75.vk_application.domain.entity.NavComponent.Favorite
+import com.github.gunin_igor75.vk_application.domain.entity.NavComponent.Home
+import com.github.gunin_igor75.vk_application.domain.entity.NavComponent.Profile
 import com.github.gunin_igor75.vk_application.navigation.AppNavGraph
 import com.github.gunin_igor75.vk_application.navigation.rememberNavigationState
 import com.github.gunin_igor75.vk_application.presentation.comments.CommentsScreen

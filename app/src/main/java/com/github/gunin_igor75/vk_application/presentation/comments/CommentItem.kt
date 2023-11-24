@@ -17,7 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.github.gunin_igor75.vk_application.domain.Comment
+import com.github.gunin_igor75.vk_application.domain.entity.Comment
 
 
 @Composable

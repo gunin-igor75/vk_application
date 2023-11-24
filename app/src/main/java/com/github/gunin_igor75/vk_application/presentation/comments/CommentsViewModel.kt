@@ -3,8 +3,10 @@ package com.github.gunin_igor75.vk_application.presentation.comments
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.gunin_igor75.vk_application.data.repository.CommentsRepository
-import com.github.gunin_igor75.vk_application.domain.FeedPost
+import com.github.gunin_igor75.vk_application.data.repository.VkRepositoryImp
+import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
+import com.github.gunin_igor75.vk_application.domain.usecases.LoadCommentsUseCase
+import com.github.gunin_igor75.vk_application.domain.usecases.LoadNextCommentsUseCase
 import com.github.gunin_igor75.vk_application.extensions.mergeWith
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filter
@@ -17,14 +19,18 @@ class CommentsViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    private val repository = CommentsRepository(application)
+    private val repository = VkRepositoryImp(application)
 
     private val loadNextDataFlow = MutableSharedFlow<CommentsScreenState>()
 
-    private val flowTemp = repository.loadComments(feedPost = feedPost)
+    private val loadCommentsUseCase = LoadCommentsUseCase(repository)
+
+    private val loadNextCommentsUseCase = LoadNextCommentsUseCase(repository)
+
+    private val stateFlowComments = loadCommentsUseCase(feedPost = feedPost)
 
 
-    val commentsFlow = flowTemp
+    val commentsFlow = stateFlowComments
         .filter { it.isNotEmpty() }
         .map {CommentsScreenState.CommentState(
                 feedPost = feedPost,
@@ -37,7 +43,7 @@ class CommentsViewModel(
 
     fun nextLoadingComments() {
         viewModelScope.launch {
-            repository.loadNextComments()
+            loadNextCommentsUseCase()
         }
     }
 

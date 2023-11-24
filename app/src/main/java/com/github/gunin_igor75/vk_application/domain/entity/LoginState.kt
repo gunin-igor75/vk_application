@@ -1,4 +1,4 @@
-package com.github.gunin_igor75.vk_application.presentation.main.login
+package com.github.gunin_igor75.vk_application.domain.entity
 
 sealed class LoginState{
 
