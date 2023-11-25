@@ -3,6 +3,7 @@ package com.github.gunin_igor75.vk_application.data.repository
 import android.app.Application
 import com.github.gunin_igor75.vk_application.data.mapper.VkMapper
 import com.github.gunin_igor75.vk_application.data.network.ApiFactory
+import com.github.gunin_igor75.vk_application.data.network.ApiService
 import com.github.gunin_igor75.vk_application.domain.entity.Comment
 import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
 import com.github.gunin_igor75.vk_application.domain.entity.LoginState
@@ -21,18 +22,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class VkRepositoryImp(
-    application: Application
+class VkRepositoryImp @Inject constructor(
+    private val mapper: VkMapper,
+    private val apiService: ApiService,
+    private val storage: VKPreferencesKeyValueStorage
 ) : VkRepository {
 
     private val scope = CoroutineScope(Dispatchers.IO)
-
-    private val mapper = VkMapper()
-
-    private val apiService = ApiFactory.apiService
-
-    private val storage = VKPreferencesKeyValueStorage(application)
     private val token
         get() = VKAccessToken.restore(storage)
 

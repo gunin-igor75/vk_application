@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.gunin_igor75.vk_application.di.ViewModelFactory
 import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
 import com.github.gunin_igor75.vk_application.presentation.news.NewsFeedScreenState.InitialState
 import com.github.gunin_igor75.vk_application.ui.theme.DarkBlue
@@ -19,9 +20,10 @@ import com.github.gunin_igor75.vk_application.ui.theme.DarkBlue
 @Composable
 fun HomeScreen(
     paddingValues: PaddingValues,
-    onCommentsAndPostClickListener: (FeedPost) -> Unit
+    onCommentsAndPostClickListener: (FeedPost) -> Unit,
+    viewModelFactory: ViewModelFactory
 ) {
-    val viewModel: NewsFeedViewModel = viewModel()
+    val viewModel: NewsFeedViewModel = viewModel(factory = viewModelFactory)
 
     val state = viewModel.screenState.collectAsState(InitialState)
 

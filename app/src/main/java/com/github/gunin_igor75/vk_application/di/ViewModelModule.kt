@@ -1,0 +1,22 @@
+package com.github.gunin_igor75.vk_application.di
+
+import androidx.lifecycle.ViewModel
+import com.github.gunin_igor75.vk_application.presentation.main.MainViewModel
+import com.github.gunin_igor75.vk_application.presentation.news.NewsFeedViewModel
+import dagger.Binds
+import dagger.Module
+import dagger.multibindings.IntoMap
+
+@Module
+interface ViewModelModule {
+
+    @IntoMap
+    @ViewModelKey(MainViewModel::class)
+    @Binds
+    fun bindMainViewModel(viewModel: MainViewModel): ViewModel
+
+    @IntoMap
+    @ViewModelKey(NewsFeedViewModel::class)
+    @Binds
+    fun bindNewsFeedModel(viewModel: NewsFeedViewModel): ViewModel
+}

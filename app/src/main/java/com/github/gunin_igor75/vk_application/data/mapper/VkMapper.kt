@@ -10,10 +10,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import javax.inject.Inject
 import kotlin.math.absoluteValue
 
 
-class VkMapper {
+class VkMapper @Inject constructor(){
     fun responseNewsFeedDtoToFeedPost(responseNewsFeedDto: ResponseNewsFeedDto): List<FeedPost> {
         val result = mutableListOf<FeedPost>()
         val posts = responseNewsFeedDto.content.posts

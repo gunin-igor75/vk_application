@@ -1,6 +1,5 @@
 package com.github.gunin_igor75.vk_application.presentation.comments
 
-import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.gunin_igor75.vk_application.R
 import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
+import com.github.gunin_igor75.vk_application.presentation.NewsApp
 import com.github.gunin_igor75.vk_application.presentation.comments.CommentsScreenState.CommentState
 import com.github.gunin_igor75.vk_application.presentation.comments.CommentsScreenState.InitialState
 import com.github.gunin_igor75.vk_application.presentation.comments.CommentsScreenState.Loading
@@ -38,12 +38,14 @@ fun CommentsScreen(
     feedPost: FeedPost,
     onBackPressed: () -> Unit
 ) {
-    val viewModel: CommentsViewModel = viewModel(
-        factory = CommentsViewModelFactory(
-            feedPost,
-            LocalContext.current.applicationContext as Application
-        )
-    )
+
+    val componentComment = ((LocalContext.current.applicationContext) as NewsApp)
+        .component
+        .getCommentScreenComponentFactory()
+        .create(feedPost)
+
+    val viewModel: CommentsViewModel = viewModel(factory = componentComment.getViewModelFactory())
+
     val state = viewModel.commentsFlow.collectAsState(initial = InitialState)
 
     when (val currentState = state.value) {

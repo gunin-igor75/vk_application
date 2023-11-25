@@ -1,10 +1,8 @@
 package com.github.gunin_igor75.vk_application.presentation.news
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.gunin_igor75.vk_application.data.repository.VkRepositoryImp
 import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
 import com.github.gunin_igor75.vk_application.domain.usecases.ChangeLikesUseCase
 import com.github.gunin_igor75.vk_application.domain.usecases.DeletePostUseCase
@@ -17,22 +15,19 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NewsFeedViewModel(application: Application) : AndroidViewModel(application) {
+class NewsFeedViewModel @Inject constructor(
+    loadRecommendationsUseCase: LoadRecommendationsUseCase,
+    private val loadRecommendationsNextUseCase: LoadRecommendationsNextUseCase,
+    private val changeLikesUseCase: ChangeLikesUseCase,
+    private val deletePostUseCase: DeletePostUseCase
+) : ViewModel() {
 
-    private val repository = VkRepositoryImp(application)
-    
     private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
         Log.d(TAG, "Exception caught exception handler")
     }
 
-    private val loadRecommendationsUseCase = LoadRecommendationsUseCase(repository)
-
-    private val loadRecommendationsNextUseCase = LoadRecommendationsNextUseCase(repository)
-
-    private val changeLikesUseCase = ChangeLikesUseCase(repository)
-
-    private val deletePostUseCase = DeletePostUseCase(repository)
 
     private val recommendationFlow = loadRecommendationsUseCase()
 

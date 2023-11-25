@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.github.gunin_igor75.vk_application.di.ViewModelFactory
 import com.github.gunin_igor75.vk_application.domain.entity.NavComponent.Favorite
 import com.github.gunin_igor75.vk_application.domain.entity.NavComponent.Home
 import com.github.gunin_igor75.vk_application.domain.entity.NavComponent.Profile
@@ -28,6 +29,7 @@ import com.github.gunin_igor75.vk_application.presentation.news.HomeScreen
 
 @Composable
 fun MainScreen(
+    viewModelFactory: ViewModelFactory
 ) {
     val navigationState = rememberNavigationState()
 
@@ -70,7 +72,8 @@ fun MainScreen(
                     paddingValues = paddingValues,
                     onCommentsAndPostClickListener = {
                         navigationState.navigateToComments(it)
-                    }
+                    },
+                    viewModelFactory
                 )
             },
             commentsScreenContent = {feedPost ->
