@@ -29,7 +29,7 @@ import com.github.gunin_igor75.vk_application.presentation.news.HomeScreen
 
 @Composable
 fun MainScreen(
-    viewModelFactory: ViewModelFactory
+
 ) {
     val navigationState = rememberNavigationState()
 
@@ -72,8 +72,7 @@ fun MainScreen(
                     paddingValues = paddingValues,
                     onCommentsAndPostClickListener = {
                         navigationState.navigateToComments(it)
-                    },
-                    viewModelFactory
+                    }
                 )
             },
             commentsScreenContent = {feedPost ->

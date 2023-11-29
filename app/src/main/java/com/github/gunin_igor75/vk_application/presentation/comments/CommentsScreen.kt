@@ -17,19 +17,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.gunin_igor75.vk_application.R
 import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
-import com.github.gunin_igor75.vk_application.presentation.NewsApp
 import com.github.gunin_igor75.vk_application.presentation.comments.CommentsScreenState.CommentState
 import com.github.gunin_igor75.vk_application.presentation.comments.CommentsScreenState.InitialState
 import com.github.gunin_igor75.vk_application.presentation.comments.CommentsScreenState.Loading
+import com.github.gunin_igor75.vk_application.presentation.getComponentNewsApp
 import com.github.gunin_igor75.vk_application.ui.theme.DarkBlue
 
 
@@ -38,16 +38,25 @@ fun CommentsScreen(
     feedPost: FeedPost,
     onBackPressed: () -> Unit
 ) {
-
-    val componentComment = ((LocalContext.current.applicationContext) as NewsApp)
-        .component
+    val component = getComponentNewsApp()
         .getCommentScreenComponentFactory()
         .create(feedPost)
 
-    val viewModel: CommentsViewModel = viewModel(factory = componentComment.getViewModelFactory())
-
+    val viewModel: CommentsViewModel = viewModel(factory = component.getViewModelFactory())
     val state = viewModel.commentsFlow.collectAsState(initial = InitialState)
+    CommentScreenContent(
+        state = state,
+        onBackPressed = onBackPressed,
+        viewModel = viewModel
+    )
+}
 
+@Composable
+fun CommentScreenContent(
+    state: State<CommentsScreenState>,
+    onBackPressed: () -> Unit,
+    viewModel: CommentsViewModel
+) {
     when (val currentState = state.value) {
         is CommentState -> {
             Scaffold(
@@ -111,4 +120,5 @@ fun CommentsScreen(
             }
         }
     }
+
 }

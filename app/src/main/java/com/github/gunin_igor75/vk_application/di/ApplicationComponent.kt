@@ -14,7 +14,7 @@ import dagger.Component
 )
 interface ApplicationComponent {
 
-    fun inject(mainActivity: MainActivity)
+    fun getViewModelFactory(): ViewModelFactory
 
     fun getCommentScreenComponentFactory(): CommentScreenComponent.Factory
 

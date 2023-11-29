@@ -6,13 +6,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.github.gunin_igor75.vk_application.di.ViewModelFactory
 import com.github.gunin_igor75.vk_application.domain.entity.FeedPost
+import com.github.gunin_igor75.vk_application.presentation.getComponentNewsApp
 import com.github.gunin_igor75.vk_application.presentation.news.NewsFeedScreenState.InitialState
 import com.github.gunin_igor75.vk_application.ui.theme.DarkBlue
 
@@ -20,13 +21,27 @@ import com.github.gunin_igor75.vk_application.ui.theme.DarkBlue
 @Composable
 fun HomeScreen(
     paddingValues: PaddingValues,
-    onCommentsAndPostClickListener: (FeedPost) -> Unit,
-    viewModelFactory: ViewModelFactory
+    onCommentsAndPostClickListener: (FeedPost) -> Unit
 ) {
-    val viewModel: NewsFeedViewModel = viewModel(factory = viewModelFactory)
-
+    val component = getComponentNewsApp()
+    val viewModel: NewsFeedViewModel = viewModel(factory = component.getViewModelFactory())
     val state = viewModel.screenState.collectAsState(InitialState)
 
+    HomeScreenContent(
+        viewModel = viewModel,
+        state = state,
+        paddingValues = paddingValues,
+        onCommentsAndPostClickListener = onCommentsAndPostClickListener
+    )
+}
+
+@Composable
+fun HomeScreenContent(
+    viewModel: NewsFeedViewModel,
+    state: State<NewsFeedScreenState>,
+    paddingValues: PaddingValues,
+    onCommentsAndPostClickListener: (FeedPost) -> Unit
+) {
     when (val currentState = state.value) {
         is NewsFeedScreenState.PostState -> {
             FeedPost(
@@ -37,6 +52,7 @@ fun HomeScreen(
                 onCommentsAndPostClickListener = onCommentsAndPostClickListener
             )
         }
+
         NewsFeedScreenState.Loading -> {
             Box(
                 modifier = Modifier
@@ -47,6 +63,7 @@ fun HomeScreen(
                 CircularProgressIndicator(color = DarkBlue)
             }
         }
+
         is InitialState -> {
 
         }

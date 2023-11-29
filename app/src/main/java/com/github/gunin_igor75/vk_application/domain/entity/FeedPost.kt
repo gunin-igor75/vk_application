@@ -1,5 +1,8 @@
 package com.github.gunin_igor75.vk_application.domain.entity
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class FeedPost(
     val id: Long,
     val communityId: Long,
